@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  tgbot:
+    build: .
+    container_name: tgbot4sillytavern
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - SILLYTAVERN_URL=${SILLYTAVERN_URL:-http://host.docker.internal:8000}
+      - HEADLESS_MODE=true
+      - DEBUG=false
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
