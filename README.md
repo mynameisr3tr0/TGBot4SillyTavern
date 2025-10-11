@@ -1,5 +1,10 @@
 # TGBot4SillyTavern
 
+[![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go)](https://go.dev/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Build Status](https://github.com/CambriaDev/TGBot4SillyTavern/workflows/Build%20and%20Test/badge.svg)](https://github.com/CambriaDev/TGBot4SillyTavern/actions)
+[![Docker](https://img.shields.io/badge/docker-supported-2496ED?style=flat&logo=docker)](https://hub.docker.com/)
+
 A Telegram Bot that integrates with [SillyTavern](https://github.com/SillyTavern/SillyTavern), allowing users to interact with their characters through Telegram instead of the web interface.
 
 ## 🎯 Features
@@ -44,9 +49,15 @@ git clone https://github.com/CambriaDev/TGBot4SillyTavern.git
 cd TGBot4SillyTavern
 ```
 
-2. Create a `.env` file based on `.env.example`:
+2. Run the setup script (interactive):
+```bash
+./setup.sh
+```
+
+Or create `.env` manually based on `.env.example`:
 ```bash
 cp .env.example .env
+# Edit .env with your configuration
 ```
 
 3. Edit `.env` and set your configuration:
@@ -80,8 +91,10 @@ cd TGBot4SillyTavern
 go mod download
 ```
 
-3. Set environment variables:
+3. Run the setup script or set environment variables:
 ```bash
+./setup.sh
+# OR manually:
 export TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
 export SILLYTAVERN_URL=http://localhost:8000
 export HEADLESS_MODE=true
@@ -118,6 +131,31 @@ All configuration is done through environment variables:
    - 🔄 **Regenerate**: Get a different response
    - ✏️ **Edit**: Modify the message
 
+### Example Bot Interface
+
+```
+Welcome to SillyTavern Bot!
+
+Choose an option:
+┌────────────────────┐
+│ 👤 Select Character│
+├────────────────────┤
+│ 💬 Chat History    │
+├────────────────────┤
+│ ⚙️ Completion Presets│
+└────────────────────┘
+```
+
+After selecting a character, chat naturally:
+```
+You: Hello!
+
+Character: *waves enthusiastically* 
+Hi there! How are you doing today?
+
+[🔄 Regenerate] [✏️ Edit]
+```
+
 ## 🏗️ Project Structure
 
 ```
@@ -142,6 +180,19 @@ TGBot4SillyTavern/
 ```
 
 ## 🔧 How It Works
+
+```
+┌─────────────┐        ┌──────────────┐       ┌─────────────────┐
+│   Telegram  │        │   TGBot4ST   │       │  SillyTavern    │
+│     User    │◄──────►│  (Go + CDP)  │◄─────►│  (Web UI)       │
+└─────────────┘        └──────────────┘       └─────────────────┘
+                              │
+                              ▼
+                       ┌──────────────┐
+                       │   Headless   │
+                       │   Chromium   │
+                       └──────────────┘
+```
 
 The bot uses a headless Chrome browser to interact with SillyTavern's frontend:
 
