@@ -39,6 +39,8 @@ A Telegram Bot that integrates with [SillyTavern](https://github.com/SillyTavern
 - A running instance of SillyTavern
 - A Telegram Bot Token (obtain from [@BotFather](https://t.me/botfather))
 
+**New to this?** Check out the [Quick Start Guide for Beginners](QUICKSTART.md) 👈
+
 ## 🚀 Quick Start
 
 ### Method 1: Docker (Recommended)
