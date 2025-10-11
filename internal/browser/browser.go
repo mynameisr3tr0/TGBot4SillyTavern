@@ -56,7 +56,7 @@ func (b *Browser) Close() {
 // GetCharacters retrieves the list of available characters
 func (b *Browser) GetCharacters() ([]Character, error) {
 	var characters []Character
-	
+
 	// This is a placeholder - actual implementation would interact with SillyTavern's DOM
 	// to extract character list
 	err := chromedp.Run(b.ctx,
@@ -80,7 +80,7 @@ func (b *Browser) GetCharacters() ([]Character, error) {
 func (b *Browser) SelectCharacter(characterName string) error {
 	// Click on the character element
 	selector := fmt.Sprintf(`//div[contains(@class, 'character_select')]//div[@class='ch_name' and text()='%s']`, characterName)
-	
+
 	err := chromedp.Run(b.ctx,
 		chromedp.Click(selector, chromedp.BySearch),
 		chromedp.Sleep(1*time.Second),

@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/CambriaDev/TGBot4SillyTavern/internal/browser"
 	"github.com/CambriaDev/TGBot4SillyTavern/internal/formatter"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 // Bot represents the Telegram bot
@@ -138,7 +138,7 @@ func (b *Bot) showCharacters(chatID int64) {
 		)
 		rows = append(rows, row)
 	}
-	
+
 	// Add back button
 	rows = append(rows, tgbotapi.NewInlineKeyboardRow(
 		tgbotapi.NewInlineKeyboardButtonData("« Back to Menu", "main_menu"),

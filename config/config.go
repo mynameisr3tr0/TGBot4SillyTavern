@@ -7,11 +7,11 @@ import (
 
 // Config holds the application configuration
 type Config struct {
-	TelegramToken    string
-	SillyTavernURL   string
-	ChromiumPath     string
-	HeadlessMode     bool
-	Debug            bool
+	TelegramToken  string
+	SillyTavernURL string
+	ChromiumPath   string
+	HeadlessMode   bool
+	Debug          bool
 }
 
 // Load loads configuration from environment variables
@@ -27,11 +27,11 @@ func Load() *Config {
 	}
 
 	return &Config{
-		TelegramToken:    getEnv("TELEGRAM_BOT_TOKEN", ""),
-		SillyTavernURL:   getEnv("SILLYTAVERN_URL", "http://localhost:8000"),
-		ChromiumPath:     getEnv("CHROMIUM_PATH", ""),
-		HeadlessMode:     headless,
-		Debug:            debug,
+		TelegramToken:  getEnv("TELEGRAM_BOT_TOKEN", ""),
+		SillyTavernURL: getEnv("SILLYTAVERN_URL", "http://localhost:8000"),
+		ChromiumPath:   getEnv("CHROMIUM_PATH", ""),
+		HeadlessMode:   headless,
+		Debug:          debug,
 	}
 }
 
