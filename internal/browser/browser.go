@@ -133,27 +133,43 @@ func (b *Browser) SelectChatHistory(historyName string) error {
 	return nil
 }
 
-// SendMessage sends a message in the chat
+// SendMessage sends a message in the chat and waits for the full response
 func (b *Browser) SendMessage(message string) (string, error) {
 	var response string
 
 	err := chromedp.Run(b.ctx,
+		// 1. Вбиваем текст и жмем отправить
 		chromedp.WaitVisible(`#send_textarea`, chromedp.ByID),
 		chromedp.SetValue(`#send_textarea`, message, chromedp.ByID),
 		chromedp.Click(`#send_but`, chromedp.ByID),
-		chromedp.Sleep(2*time.Second), // Wait for response
+		
+		// 2. УМНОЕ ОЖИДАНИЕ: Ждем, пока появится кнопка "Stop" (начало генерации)
+		chromedp.WaitVisible(`#mes_stop`, chromedp.ByID),
+		
+		// 3. УМНОЕ ОЖИДАНИЕ: Ждем, пока кнопка "Stop" ИСЧЕЗНЕТ (конец генерации).
+		// Это может занять хоть 5 секунд, хоть минуту — бот будет ждать.
+		chromedp.WaitNotVisible(`#mes_stop`, chromedp.ByID),
+		
+		// Небольшая пауза, чтобы DOM точно успел обновить текст после остановки
+		chromedp.Sleep(500*time.Millisecond),
+		
+		// 4. Забираем текст самого последнего сообщения в чате
 		chromedp.Evaluate(`
-			document.querySelector('.mes_block:last-child .mes_text')?.innerHTML || ''
+			(() => {
+				const messages = Array.from(document.querySelectorAll('.mes_text'));
+				if (messages.length === 0) return "Ошибка: сообщения не найдены";
+				return messages[messages.length - 1].innerText;
+			})()
 		`, &response),
 	)
 
 	if err != nil {
-		return "", fmt.Errorf("failed to send message: %w", err)
+		fmt.Printf("DEBUG ERROR in SendMessage: %v\n", err)
+		return "", err
 	}
 
 	return response, nil
 }
-
 // EditMessage edits a specific message
 func (b *Browser) EditMessage(messageIndex int, newText string) error {
 	script := fmt.Sprintf(`
