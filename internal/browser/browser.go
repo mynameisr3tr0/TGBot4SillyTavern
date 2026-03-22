@@ -138,22 +138,21 @@ func (b *Browser) SendMessage(message string) (string, error) {
 	var response string
 
 	err := chromedp.Run(b.ctx,
-		// 1. Вбиваем текст и жмем отправить
+		// Type the text
 		chromedp.WaitVisible(`#send_textarea`, chromedp.ByID),
 		chromedp.SetValue(`#send_textarea`, message, chromedp.ByID),
 		chromedp.Click(`#send_but`, chromedp.ByID),
 		
-		// 2. УМНОЕ ОЖИДАНИЕ: Ждем, пока появится кнопка "Stop" (начало генерации)
+		// Smart wait for stop button
 		chromedp.WaitVisible(`#mes_stop`, chromedp.ByID),
 		
-		// 3. УМНОЕ ОЖИДАНИЕ: Ждем, пока кнопка "Stop" ИСЧЕЗНЕТ (конец генерации).
-		// Это может занять хоть 5 секунд, хоть минуту — бот будет ждать.
+		// Wait for stop button dissappear
 		chromedp.WaitNotVisible(`#mes_stop`, chromedp.ByID),
 		
-		// Небольшая пауза, чтобы DOM точно успел обновить текст после остановки
+		// Little pause
 		chromedp.Sleep(500*time.Millisecond),
 		
-		// 4. Забираем текст самого последнего сообщения в чате
+		// Getting the text
 		chromedp.Evaluate(`
 			(() => {
 				const messages = Array.from(document.querySelectorAll('.mes_text'));
